@@ -1,6 +1,5 @@
 package com.my.articles.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +12,6 @@ public class ArticleController {
     public String showAllArticles() {
         return "/articles/show_all";
     }
-
 
     @GetMapping("new")
     public String newArticle() {
@@ -44,6 +42,4 @@ public class ArticleController {
     public String deleteArticle() {
         return "redirect:articles";
     }
-
-
 }

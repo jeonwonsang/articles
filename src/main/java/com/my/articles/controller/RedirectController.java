@@ -12,7 +12,6 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("/mapping")
 public class RedirectController {
-
     @GetMapping("")
     public String testMain() {
         return "/test/testMain";
@@ -23,7 +22,8 @@ public class RedirectController {
         return "/test/page";
     }
 
-    @RequestMapping(value = "requestMapping", method = RequestMethod.GET)
+    @RequestMapping(value = "requestMapping",
+            method = RequestMethod.GET)
     public String requestMapping(Model model) {
         String msg = "RequestMapping";
         model.addAttribute("msg", msg);
@@ -40,6 +40,7 @@ public class RedirectController {
 
     @GetMapping("redirectView")
     public RedirectView redirectView(RedirectAttributes redirectAttributes) {
+
         String msg = "redirectView";
         redirectAttributes.addFlashAttribute("msg", msg);
         return new RedirectView("page");
@@ -47,10 +48,9 @@ public class RedirectController {
 
     @GetMapping("redirectView2")
     public String redirectView2(RedirectAttributes redirectAttributes) {
-
         String msg = "redirectView2";
         redirectAttributes.addFlashAttribute("msg", msg);
-        return "redirect:/page";
+        return "redirect:page";
     }
 
     @GetMapping("redirect_1")
@@ -60,7 +60,7 @@ public class RedirectController {
 
     @GetMapping("redirect_2")
     public ModelAndView redirect_2() {
-        String url = "redirect:http://www.daum.net";
+        String url = "redirect:http://localhost:8081/main";
         return new ModelAndView(url);
     }
 }
