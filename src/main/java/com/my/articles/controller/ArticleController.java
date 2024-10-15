@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,17 +54,23 @@ public class ArticleController {
     }
 
     @GetMapping("{id}/update")
-    public String viewUpdateArticle() {
+    public String viewUpdateArticle(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("dto", articleService.getOneArticle(id));
         return "/articles/update";
     }
 
     @PostMapping("update")
-    public String updateArticle() {
-        return "redirect:articles";
+    public String updateArticle(ArticleDTO dto) {
+        String url = "redirect:/"+dto.getId();
+        articleService.updateArticle(dto);
+        return url;
     }
 
     @GetMapping("{id}/delete")
-    public String deleteArticle() {
+    public String deleteArticle(@PathVariable("id") Long id,
+                                RedirectAttributes redirectAttributes) {
+        articleService.deleteArticle(id);
+        redirectAttributes.addFlashAttribute("msg", "정상삭제 되었습니다");
         return "redirect:";
     }
 }
