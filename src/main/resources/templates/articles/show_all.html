@@ -10,28 +10,25 @@
 <!--  우리가 작업할 공간 -->
 <body>
 <div layout:fragment="content" class="content">
-    <table class="table">
+    <table class="table" border="1">
         <thead>
         <tr>
-            <th scope="col">Id</th>
+            <th scope="col">No</th>
             <th scope="col">Title</th>
             <th scope="col">Content</th>
         </tr>
         </thead>
         <tbody>
-        <div>
-            <tr>
-                <th scope="row">1</th>
+            <tr th:each="article : ${articles}" th:object="${article}" >
+                <th th:text="${id}"></th>
                 <td>
-                    <a href="">제목111 </a>
+                <a th:href="@{/articles/{id}(id=*{id})}" th:text="${title}"></a>
                 </td>
-                <td>내용 1111</td>
+                <th th:text="${content}"></th>
             </tr>
-        </div>
         </tbody>
     </table>
     <a href="/articles/new">New Article</a>
 </div>
-
 </body>
 </html>
