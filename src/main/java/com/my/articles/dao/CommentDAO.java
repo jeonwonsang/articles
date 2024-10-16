@@ -1,33 +1,37 @@
 package com.my.articles.dao;
 
-
+import com.my.articles.entity.Article;
 import com.my.articles.entity.Comment;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @Transactional
-public class ommentDAO {
+public class CommentDAO {
     @Autowired
     EntityManager em;
 
-    public void insertComment(Comment comment) {
-        em.persist(comment);
+    public Long deleteComment(Long id) {
+        Comment comment = em.find(Comment.class, id);
+        em.remove(comment);
+        return comment.getArticle().getId();
     }
 
-    public Comment findAllCommentById(Long id) {
-        return em.find(Comment.class, id);
+    public void insertComment(Long articleId, Comment comment) {
+        Article article = em.find(Article.class, articleId);
+        comment.setArticle(article);
+        article.getComments().add(comment);
+        em.persist(article);
     }
 
-    public List<Comment> getAllComment() {
-        String sql = "SELECT c FROM Comment c " +
-                "ORDER BY c.id DESC";
+    public Comment findByIdComment(Long commentId) {
+        return em.find(Comment.class, commentId);
+    }
 
-        return em.createQuery(sql).getResultList();
+    public void updateComment(Comment comment) {
+        Comment updateCommnet = em.find(Comment.class, comment.getId());
+        updateCommnet.setBody(comment.getBody());
     }
 }
-

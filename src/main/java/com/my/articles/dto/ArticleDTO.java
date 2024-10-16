@@ -24,7 +24,7 @@ public class ArticleDTO {
                 article.getContent(),
                 article.getComments()
                         .stream()
-                        .map(x -> CommentDTO.fromComment(x))
+                        .map(x->CommentDTO.fromEntity(x))
                         .toList()
         );
     }

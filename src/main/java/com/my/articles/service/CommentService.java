@@ -1,40 +1,38 @@
 package com.my.articles.service;
 
-
 import com.my.articles.dao.CommentDAO;
 import com.my.articles.dto.CommentDTO;
 import com.my.articles.entity.Comment;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
-    @Autowired
-    CommentDAO dao;
+    private final CommentDAO commentDAO;
 
-    public void insertComment(CommentDTO dto) {
-        dao.insertComment(CommentDTO.fromDto(dto));
+    public Long deleteComment(Long id) {
+        return commentDAO.deleteComment(id);
     }
 
-    public CommentDTO findAllCommentById(Long id) {
-        Comment comment = dao.findAllCommentById(id);
-        return CommentDTO.fromComment(comment);
+    public void insertComment(Long articleId, CommentDTO dto) {
+        commentDAO.insertComment(articleId,
+                CommentDTO.fromDto(dto));
     }
 
-    public List<CommentDTO> getAllComment() {
-        List<Comment> comments = dao.getAllComment();
-        if (ObjectUtils.isEmpty(comments)) {
-            return Collections.emptyList();
-        }
-        List<CommentDTO> dtoList = comments
-                .stream().map(x -> CommentDTO.fromComment(x))
-                .toList();
-        return dtoList;
+    public Map<String, Object> findByIdComment(Long commentId) {
+        Comment comment = commentDAO.findByIdComment(commentId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("dto", CommentDTO.fromEntity(comment));
+        map.put("articleId", comment.getArticle().getId());
+        return map;
+    }
+
+    public void updateComment(CommentDTO dto) {
+        commentDAO.updateComment(CommentDTO.fromDto(dto));
     }
 }
-

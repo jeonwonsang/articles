@@ -4,6 +4,7 @@ import com.my.articles.dto.ArticleDTO;
 import com.my.articles.entity.Article;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Component
 @Transactional
+@Slf4j
 public class ArticleDAO {
     @Autowired
     EntityManager em;
@@ -23,7 +25,9 @@ public class ArticleDAO {
     }
 
     public Article getOneArticle(Long id) {
-        return em.find(Article.class, id);
+        Article article = em.find(Article.class, id);
+        log.info(article.toString());
+        return article;
     }
 
     public void deleteArticle(Long id) {

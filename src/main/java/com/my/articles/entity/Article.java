@@ -2,16 +2,19 @@ package com.my.articles.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "article_id")
     private Long id;
     @Column(nullable = false, length = 50)
     private String title;
@@ -19,7 +22,9 @@ public class Article {
     private String content;
 
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "article", cascade = {CascadeType.PERSIST,
-            CascadeType.REMOVE})
+            mappedBy = "article",
+            cascade = {CascadeType.PERSIST,
+                    CascadeType.REMOVE})
     List<Comment> comments = new ArrayList<>();
+
 }
