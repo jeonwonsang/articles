@@ -1,20 +1,19 @@
 package com.my.articles.dto;
 
-
 import com.my.articles.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentDTO {
     private Long id;
     private String nickname;
     private String body;
 
-    public static CommentDTO fromComment(Comment comment) {
+    public static CommentDTO fromEntity(Comment comment) {
         return new CommentDTO(
                 comment.getId(),
                 comment.getNickname(),

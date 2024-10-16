@@ -1,11 +1,7 @@
 package com.my.articles.controller;
 
-import com.my.articles.dao.CommentDAO;
 import com.my.articles.dto.ArticleDTO;
-import com.my.articles.dto.CommentDTO;
-import com.my.articles.entity.Comment;
 import com.my.articles.service.ArticleService;
-import com.my.articles.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +19,6 @@ public class ArticleController {
     @Autowired
     ArticleService articleService;
 
-    @Autowired
-    CommentService commentService;
-
     @GetMapping("")
     public String showAllArticles(Model model) {
         List<ArticleDTO> dtoList = articleService.getAllArticle();
@@ -35,7 +28,8 @@ public class ArticleController {
 
     @GetMapping("new")
     public String newArticle(Model model) {
-        model.addAttribute("dto", new ArticleDTO());
+        model.addAttribute("dto",
+                new ArticleDTO());
         return "/articles/new";
     }
 
@@ -46,22 +40,18 @@ public class ArticleController {
     }
 
     @GetMapping("{id}")
-    public String showOneArticle(@PathVariable("id") Long id, Model model) {
+    public String showOneArticle(@PathVariable("id") Long id,
+                                 Model model) {
         ArticleDTO dto = articleService.getOneArticle(id);
         model.addAttribute("dto", dto);
-
-//        CommentDTO commentDTO = commentService.findAllCommentById(id);
-//        model.addAttribute("cto", commentDTO);
-//        List<CommentDTO> dtoList = commentService.getAllComment();
-//        model.addAttribute("ctoList", dtoList);
-
         return "/articles/show";
     }
 
-
     @GetMapping("{id}/update")
-    public String viewUpdateArticle(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("dto", articleService.getOneArticle(id));
+    public String viewUpdateArticle(@PathVariable("id")Long id,
+                                    Model model) {
+        model.addAttribute("dto",
+                articleService.getOneArticle(id));
         return "/articles/update";
     }
 
@@ -73,17 +63,11 @@ public class ArticleController {
     }
 
     @GetMapping("{id}/delete")
-    public String deleteArticle(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteArticle(@PathVariable("id")Long id,
+                                RedirectAttributes redirectAttributes) {
         articleService.deleteArticle(id);
         redirectAttributes.addFlashAttribute("msg",
                 "정상적으로 삭제되었습니다.");
         return "redirect:/articles";
-    }
-
-
-    @PostMapping("insertComment")
-    public String insertComment(CommentDTO dto) {
-        commentService.insertComment(dto);
-        return "/articles/show";
     }
 }
