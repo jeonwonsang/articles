@@ -5,6 +5,7 @@ import com.my.articles.dto.CommentDTO;
 import com.my.articles.entity.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +28,13 @@ public class CommentService {
     public Map<String, Object> findByIdComment(Long commentId) {
         Comment comment = commentDAO.findByIdComment(commentId);
         Map<String, Object> map = new HashMap<>();
-        map.put("dto", CommentDTO.fromEntity(comment));
-        map.put("articleId", comment.getArticle().getId());
+        if (ObjectUtils.isEmpty(comment)) {
+            map.put("dto", null);
+            map.put("articleId", null);
+        } else {
+            map.put("dto", CommentDTO.fromEntity(comment));
+            map.put("articleId", comment.getArticle().getId());
+        }
         return map;
     }
 
