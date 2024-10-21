@@ -15,6 +15,7 @@ import java.util.Map;
 public class CommentApiController {
     private final CommentService commentService;
 
+
     public CommentApiController(CommentService commentService) {
         this.commentService = commentService;
     }
@@ -28,18 +29,22 @@ public class CommentApiController {
 
     // 1. 댓글 조회
     @GetMapping("/api/comments/{commentId}")
-    public ResponseEntity<?> CommentSearch(@PathVariable("commentId") Long commentId) {
-        CommentDTO findComment = extracted(commentId, "댓글 조회에 실패했습니다");
+    public ResponseEntity<?> commentSearch(
+            @PathVariable("commentId")Long commentId) {
 
-        CommentDTO dto = (CommentDTO) findComment.get("dto");
+        CommentDTO findComment = extracted(commentId,
+                "댓글 조회에 실패했습니다.");
 
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        CommentDTO dto = (CommentDTO) findComment;
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(dto);
     }
-
     // 2. 댓글 생성
     @PostMapping("/api/articles/{articleId}/comments")
-    public ResponseEntity<?> CommentCreate(
-            @PathVariable("articleId") Long articleId,
+    public ResponseEntity<?> commentCreate(
+            @PathVariable("articleId")Long articleId,
             @RequestBody CommentDTO dto) {
         commentService.insertComment(articleId, dto);
         return ResponseEntity
@@ -48,38 +53,39 @@ public class CommentApiController {
                         .message("댓글 생성 성공")
                         .build());
     }
-
     // 3. 댓글 수정
-    @GetMapping("/api/comments/{commentId}")
-    public ResponseEntity<?> CommentUpdate(
-            @PathVariable("commentId") Long commentId,
+    @PatchMapping("/api/comments/{commentId}")
+    public ResponseEntity<?> commentUpdate(
+            @PathVariable("commentId")Long commentId,
             @RequestBody CommentDTO dto) {
-        CommentDTO result = extracted(commentId, "댓글 수정에 실패했습니다");
+        CommentDTO result =
+                extracted(commentId, "댓글 수정에 실패했습니다.");
 
         dto.setId(commentId);
         commentService.updateComment(dto);
-        ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.builder()
                         .message("댓글 수정 성공")
                         .build());
-        return null;
     }
 
     private CommentDTO extracted(Long commentId, String message) {
         // 수정할 댓글 존재 확인
-        Map<String, Object> findComment = commentService.findByIdComment(commentId);
+        Map<String, Object> findComment =
+                commentService.findByIdComment(commentId);
 
-        if (ObjectUtils.isEmpty(findComment.get("dto")))
+        if(ObjectUtils.isEmpty(findComment.get("dto")))
             throw new BadRequestException(message);
         return (CommentDTO) findComment.get("dto");
     }
 
     // 4. 댓글 삭제
     @DeleteMapping("/api/comments/{commentId}")
-    public ResponseEntity<?> CommentDelete(@PathVariable("commentId") Long commentId) {
-
+    public ResponseEntity<?> commentDelete(
+            @PathVariable("commentId")Long commentId) {
         // 삭제할 댓글 존재 확인
-        extracted(commentId, "댓글 삭제에 실패했습니다");
+        CommentDTO result =
+                extracted(commentId, "댓글 삭제에 실패했습니다.");
 
         commentService.deleteComment(commentId);
 

@@ -31,11 +31,12 @@ public class CommentService {
         if (ObjectUtils.isEmpty(comment)) {
             map.put("dto", null);
             map.put("articleId", null);
+            return map;
         } else {
             map.put("dto", CommentDTO.fromEntity(comment));
             map.put("articleId", comment.getArticle().getId());
+            return map;
         }
-        return map;
     }
 
     public void updateComment(CommentDTO dto) {
